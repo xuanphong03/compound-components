@@ -9,11 +9,35 @@ html {
   font-size: 1vw;
 }
 .container {
-  width: 800px;
 }
 
 .accordion-item.active .accordion__content {
   margin-top: 1rem;
+}
+.accordion {
+  width: 53.5rem;
+  display: block;
+}
+.accordion-item {
+  display: block;
+  width: 100%;
+  padding: 1.5625rem 1.8125rem 1.5625rem 2.0625rem;
+  border-radius: 1rem;
+  border: var(--stroke-weight-1, 1px) solid var(--stroke, #dfe1f5);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.accordion-item:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.accordion__trigger {
+  color: var(--text-title, #004b88);
+  font-family: "Averta Std CY";
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
 }
 
 .accordion__content {
@@ -23,5 +47,36 @@ html {
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 1.5rem */
+  line-height: 150%;
+  transition: height 0.3s ease, margin 0.3s ease;
+  display: block;
+  height: 0px;
+  overflow: hidden;
+}
+
+.accordion__trigger-btn {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.accordion__trigger-btn .trigger__btn {
+  position: absolute;
+  inset: 0;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.accordion-item.active .accordion__trigger-btn .trigger__btn.trigger__btn--open,
+.accordion-item .accordion__trigger-btn .trigger__btn.trigger__btn--close {
+  opacity: 0;
+  visibility: hidden;
+}
+.accordion-item .accordion__trigger-btn .trigger__btn.trigger__btn--open,
+.accordion-item.active
+  .accordion__trigger-btn
+  .trigger__btn.trigger__btn--close {
+  opacity: 1;
+  visibility: visible;
 }
