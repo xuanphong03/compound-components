@@ -8,9 +8,6 @@
 html {
   font-size: 1vw;
 }
-.container {
-}
-
 .accordion-item.active .accordion__content {
   margin-top: 1rem;
 }
