@@ -1,36 +1,41 @@
+// Common styles that are reused across components
+const COMMON_STYLES = `
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0;
+    outline: 0;
+  }
+`;
+
 addEventListener("DOMContentLoaded", function () {
   function addStyleToShadowRoot(shadowRoot, cssText) {
     const style = document.createElement("style");
     style.textContent = cssText;
     shadowRoot.append(style);
   }
+
   class Accordion extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({
-        mode: "open",
-      });
+      this.attachShadow({ mode: "open" });
     }
+
     connectedCallback() {
       this.render();
       this.loadStyle();
     }
+
     render() {
-      this.shadowRoot.innerHTML = `
-      <slot></slot>
-    `;
+      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
+
     loadStyle() {
       const style = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            outline: 0;
-        }
+        ${COMMON_STYLES}
         slot {
-          display:block;
+          display: block;
           position: relative;
         }
       `;
@@ -41,129 +46,100 @@ addEventListener("DOMContentLoaded", function () {
   class AccordionItem extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({
-        mode: "open",
-      });
+      this.attachShadow({ mode: "open" });
+      this.handleClick = this.handleClick.bind(this);
     }
+
     connectedCallback() {
       this.render();
       this.loadStyle();
       this.addEventToggleAccordion();
     }
-    addEventToggleAccordion() {
-      const accordionItem = this;
-      function getInitialHeight(element) {
-        // Store original styles
-        const originalStyles = {
-          position: element.style.position,
-          top: element.style.top,
-          left: element.style.left,
-          height: element.style.height,
-          display: element.style.display,
-          overflow: element.style.overflow,
-          visibility: element.style.visibility,
-          marginTop: element.style.marginTop,
-        };
 
-        // Set temporary styles for measurement
-        const visibleCSS = {
-          position: "absolute",
-          top: "-9999px",
-          left: "0",
-          height: "auto",
-          display: "block",
-          overflow: "visible",
-          visibility: "hidden",
-          marginTop: "0",
-        };
-        // Apply temporary styles to the element
-        Object.assign(element.style, visibleCSS);
-        const initialElementHeight = element.clientHeight;
-
-        // Apply original styles back to the element
-        Object.keys(originalStyles).forEach((key) => {
-          if (originalStyles[key]) {
-            element.style[key] = originalStyles[key];
-          } else {
-            element.style[key] = "";
-          }
-        });
-        return initialElementHeight;
+    disconnectedCallback() {
+      const trigger = this.querySelector("custom-accordion-trigger");
+      if (trigger) {
+        trigger.removeEventListener("click", this.handleClick);
       }
+    }
 
-      function closeAccordion(accordionItem, accordionContent) {
-        if (!accordionItem || !accordionContent) return;
-        // Set height to current height before transition
-        accordionContent.style.height = accordionContent.scrollHeight + "px";
-        // Force browser to recognize style change before animation
-        if (accordionContent) {
-          window.getComputedStyle(accordionContent).height;
+    handleClick(event) {
+      event.preventDefault();
+      const content = this.querySelector("custom-accordion-content");
+      if (!content) return;
+
+      if (this.classList.contains("active")) {
+        this.closeAccordion(content);
+      } else {
+        this.openAccordion(content);
+      }
+    }
+
+    getInitialHeight(element) {
+      const originalDisplay = element.style.display;
+      const originalVisibility = element.style.visibility;
+      const originalHeight = element.style.height;
+
+      element.style.display = "block";
+      element.style.visibility = "hidden";
+      element.style.height = "auto";
+
+      const height = element.scrollHeight;
+
+      element.style.display = originalDisplay;
+      element.style.visibility = originalVisibility;
+      element.style.height = originalHeight;
+
+      return height;
+    }
+
+    closeAccordion(content) {
+      if (!content) return;
+      content.style.height = content.scrollHeight + "px";
+      requestAnimationFrame(() => {
+        this.classList.remove("active");
+        content.style.height = "0px";
+      });
+    }
+
+    openAccordion(content) {
+      if (!content) return;
+      this.closeAllAccordionContent();
+      const contentHeight = this.getInitialHeight(content);
+      this.classList.add("active");
+      requestAnimationFrame(() => {
+        content.style.height = contentHeight + "px";
+      });
+    }
+
+    closeAllAccordionContent() {
+      const activeItems = document.querySelectorAll(
+        "custom-accordion-item.active"
+      );
+      activeItems.forEach((item) => {
+        const content = item.querySelector("custom-accordion-content");
+        if (content) {
+          item.classList.remove("active");
+          content.style.height = "0px";
+          content.style.marginTop = "0";
         }
-        // Apply new styles to trigger transition
-        accordionItem.classList.remove("active");
-        accordionContent.style.height = "0px";
-      }
+      });
+    }
 
-      function openAccordion(accordionItem, accordionContent) {
-        if (!accordionItem || !accordionContent) return;
-        // Close all accordion item
-        closeAllAccordionContent();
-        const contentHeight = getInitialHeight(accordionContent);
-        accordionItem.classList.add("active");
-        window.getComputedStyle(accordionContent).height;
-        accordionContent.style.height = contentHeight + "px";
-      }
-
-      function closeAllAccordionContent() {
-        const activeAccordionItem = document.querySelectorAll(
-          "custom-accordion-item.active"
-        );
-        activeAccordionItem.forEach(function (accordionItem) {
-          const accordionContent = accordionItem.querySelector(
-            "custom-accordion-content"
-          );
-          accordionItem.classList.remove("active");
-          accordionContent.style.height = "0px";
-          accordionContent.style.marginTop = "0";
-        });
-      }
-
-      if (accordionItem) {
-        const accordionTrigger = accordionItem.querySelector(
-          "custom-accordion-trigger"
-        );
-        const accordionContent = accordionItem.querySelector(
-          "custom-accordion-content"
-        );
-        if (!accordionTrigger || !accordionContent) return;
-        // Add event listener to accordion trigger
-        accordionTrigger.addEventListener("click", function (event) {
-          event.preventDefault();
-          if (!accordionContent) return;
-          // Check if the current accordion item is already active
-          if (accordionItem.classList.contains("active")) {
-            closeAccordion(accordionItem, accordionContent);
-          } else {
-            openAccordion(accordionItem, accordionContent);
-          }
-        });
+    addEventToggleAccordion() {
+      const trigger = this.querySelector("custom-accordion-trigger");
+      if (trigger) {
+        trigger.addEventListener("click", this.handleClick);
       }
     }
 
     render() {
-      this.shadowRoot.innerHTML = `
-      <slot></slot>
-    `;
+      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
+
     loadStyle() {
       const style = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            outline: 0;
-        }
+        ${COMMON_STYLES}
         slot {
           display: block;
         }
@@ -175,10 +151,9 @@ addEventListener("DOMContentLoaded", function () {
   class AccordionTrigger extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({
-        mode: "open",
-      });
+      this.attachShadow({ mode: "open" });
     }
+
     connectedCallback() {
       this.render();
       this.loadStyle();
@@ -186,21 +161,15 @@ addEventListener("DOMContentLoaded", function () {
 
     render() {
       this.shadowRoot.innerHTML = `
-      <div class="accordion__trigger-wrapper">
-        <slot>
-        </slot>
-      </div>
-     `;
+        <div class="accordion__trigger-wrapper">
+          <slot></slot>
+        </div>
+      `;
     }
+
     loadStyle() {
       const style = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            outline: 0;
-        }
+        ${COMMON_STYLES}
         slot {
           display: flex;
           justify-content: space-between;
@@ -210,32 +179,25 @@ addEventListener("DOMContentLoaded", function () {
       addStyleToShadowRoot(this.shadowRoot, style);
     }
   }
+
   class AccordionContent extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({
-        mode: "open",
-      });
+      this.attachShadow({ mode: "open" });
     }
+
     connectedCallback() {
       this.render();
       this.loadStyle();
     }
 
     render() {
-      this.shadowRoot.innerHTML = `
-      <slot></slot>
-    `;
+      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
+
     loadStyle() {
       const style = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            outline: 0;
-        }
+        ${COMMON_STYLES}
         slot {
           display: block;
           width: 100%;
@@ -248,35 +210,26 @@ addEventListener("DOMContentLoaded", function () {
   class AccordionToggleButton extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({
-        mode: "open",
-      });
+      this.attachShadow({ mode: "open" });
     }
+
     connectedCallback() {
       this.render();
       this.loadStyle();
     }
 
     render() {
-      this.shadowRoot.innerHTML = `
-      <slot></slot>
-    `;
+      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
+
     loadStyle() {
-      const style = document.createElement("style");
-      style.textContent = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            border: 0;
-            outline: 0;
-        }
+      const style = `
+        ${COMMON_STYLES}
         slot {
           position: relative;
         }
-    `;
-      this.shadowRoot.append(style);
+      `;
+      addStyleToShadowRoot(this.shadowRoot, style);
     }
   }
 
