@@ -1,8 +1,6 @@
 // Common styles that are reused across components
 const COMMON_STYLES = `
   * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     border: 0;
     outline: 0;
@@ -35,6 +33,8 @@ addEventListener("DOMContentLoaded", function () {
       const style = `
         ${COMMON_STYLES}
         slot {
+          margin: 0;
+          padding: 0;
           display: block;
           position: relative;
         }
@@ -141,6 +141,8 @@ addEventListener("DOMContentLoaded", function () {
       const style = `
         ${COMMON_STYLES}
         slot {
+                  margin: 0;
+          padding: 0;
           display: block;
         }
       `;
