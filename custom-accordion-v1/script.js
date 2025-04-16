@@ -7,26 +7,29 @@ const COMMON_STYLES = `
   }
 `;
 
-addEventListener("DOMContentLoaded", function () {
-  function addStyleToShadowRoot(shadowRoot, cssText) {
-    const style = document.createElement("style");
-    style.textContent = cssText;
-    shadowRoot.append(style);
+// Base class for all custom elements
+class BaseElement extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
   }
 
-  class Accordion extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
-    }
+  addStyleToShadowRoot(cssText) {
+    const style = document.createElement("style");
+    style.textContent = cssText;
+    this.shadowRoot.append(style);
+  }
 
+  render() {
+    this.shadowRoot.innerHTML = `<slot></slot>`;
+  }
+}
+
+addEventListener("DOMContentLoaded", function () {
+  class Accordion extends BaseElement {
     connectedCallback() {
       this.render();
       this.loadStyle();
-    }
-
-    render() {
-      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
 
     loadStyle() {
@@ -39,76 +42,95 @@ addEventListener("DOMContentLoaded", function () {
           position: relative;
         }
       `;
-      addStyleToShadowRoot(this.shadowRoot, style);
+      this.addStyleToShadowRoot(style);
     }
   }
 
-  class AccordionItem extends HTMLElement {
+  class AccordionItem extends BaseElement {
     constructor() {
       super();
-      this.attachShadow({ mode: "open" });
       this.handleClick = this.handleClick.bind(this);
+      this._content = null;
+      this._trigger = null;
     }
 
     connectedCallback() {
       this.render();
       this.loadStyle();
-      this.addEventToggleAccordion();
+      this.initializeElements();
+      this.addEventListeners();
     }
 
     disconnectedCallback() {
-      const trigger = this.querySelector("custom-accordion-trigger");
-      if (trigger) {
-        trigger.removeEventListener("click", this.handleClick);
+      this.removeEventListeners();
+    }
+
+    initializeElements() {
+      this._content = this.querySelector("custom-accordion-content");
+      this._trigger = this.querySelector("custom-accordion-trigger");
+    }
+
+    addEventListeners() {
+      if (this._trigger) {
+        this._trigger.addEventListener("click", this.handleClick);
+      }
+    }
+
+    removeEventListeners() {
+      if (this._trigger) {
+        this._trigger.removeEventListener("click", this.handleClick);
       }
     }
 
     handleClick(event) {
       event.preventDefault();
-      const content = this.querySelector("custom-accordion-content");
-      if (!content) return;
+      if (!this._content) return;
 
       if (this.classList.contains("active")) {
-        this.closeAccordion(content);
+        this.closeAccordion();
       } else {
-        this.openAccordion(content);
+        this.openAccordion();
       }
     }
 
-    getInitialHeight(element) {
-      const originalDisplay = element.style.display;
-      const originalVisibility = element.style.visibility;
-      const originalHeight = element.style.height;
+    getInitialHeight() {
+      if (!this._content) return 0;
 
-      element.style.display = "block";
-      element.style.visibility = "hidden";
-      element.style.height = "auto";
+      const originalDisplay = this._content.style.display;
+      const originalVisibility = this._content.style.visibility;
+      const originalHeight = this._content.style.height;
 
-      const height = element.scrollHeight;
+      this._content.style.display = "block";
+      this._content.style.visibility = "hidden";
+      this._content.style.height = "auto";
 
-      element.style.display = originalDisplay;
-      element.style.visibility = originalVisibility;
-      element.style.height = originalHeight;
+      const height = this._content.scrollHeight;
+
+      this._content.style.display = originalDisplay;
+      this._content.style.visibility = originalVisibility;
+      this._content.style.height = originalHeight;
 
       return height;
     }
 
-    closeAccordion(content) {
-      if (!content) return;
-      content.style.height = content.scrollHeight + "px";
+    closeAccordion() {
+      if (!this._content) return;
+
+      this._content.style.height = this._content.scrollHeight + "px";
       requestAnimationFrame(() => {
         this.classList.remove("active");
-        content.style.height = "0px";
+        this._content.style.height = "0px";
       });
     }
 
-    openAccordion(content) {
-      if (!content) return;
+    openAccordion() {
+      if (!this._content) return;
+
       this.closeAllAccordionContent();
-      const contentHeight = this.getInitialHeight(content);
+      const contentHeight = this.getInitialHeight();
       this.classList.add("active");
       requestAnimationFrame(() => {
-        content.style.height = contentHeight + "px";
+        this._content.style.height = contentHeight + "px";
       });
     }
 
@@ -117,45 +139,31 @@ addEventListener("DOMContentLoaded", function () {
         "custom-accordion-item.active"
       );
       activeItems.forEach((item) => {
-        const content = item.querySelector("custom-accordion-content");
-        if (content) {
-          item.classList.remove("active");
-          content.style.height = "0px";
-          content.style.marginTop = "0";
+        if (item !== this) {
+          const content = item.querySelector("custom-accordion-content");
+          if (content) {
+            item.classList.remove("active");
+            content.style.height = "0px";
+            content.style.marginTop = "0";
+          }
         }
       });
-    }
-
-    addEventToggleAccordion() {
-      const trigger = this.querySelector("custom-accordion-trigger");
-      if (trigger) {
-        trigger.addEventListener("click", this.handleClick);
-      }
-    }
-
-    render() {
-      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
 
     loadStyle() {
       const style = `
         ${COMMON_STYLES}
         slot {
-                  margin: 0;
+          margin: 0;
           padding: 0;
           display: block;
         }
       `;
-      addStyleToShadowRoot(this.shadowRoot, style);
+      this.addStyleToShadowRoot(style);
     }
   }
 
-  class AccordionTrigger extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
-    }
-
+  class AccordionTrigger extends BaseElement {
     connectedCallback() {
       this.render();
       this.loadStyle();
@@ -172,29 +180,23 @@ addEventListener("DOMContentLoaded", function () {
     loadStyle() {
       const style = `
         ${COMMON_STYLES}
+        .accordion__trigger-wrapper {
+          width: 100%;
+        }
         slot {
           display: flex;
           justify-content: space-between;
           cursor: pointer;
         }
       `;
-      addStyleToShadowRoot(this.shadowRoot, style);
+      this.addStyleToShadowRoot(style);
     }
   }
 
-  class AccordionContent extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
-    }
-
+  class AccordionContent extends BaseElement {
     connectedCallback() {
       this.render();
       this.loadStyle();
-    }
-
-    render() {
-      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
 
     loadStyle() {
@@ -205,23 +207,14 @@ addEventListener("DOMContentLoaded", function () {
           width: 100%;
         }
       `;
-      addStyleToShadowRoot(this.shadowRoot, style);
+      this.addStyleToShadowRoot(style);
     }
   }
 
-  class AccordionToggleButton extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
-    }
-
+  class AccordionToggleButton extends BaseElement {
     connectedCallback() {
       this.render();
       this.loadStyle();
-    }
-
-    render() {
-      this.shadowRoot.innerHTML = `<slot></slot>`;
     }
 
     loadStyle() {
@@ -231,10 +224,11 @@ addEventListener("DOMContentLoaded", function () {
           position: relative;
         }
       `;
-      addStyleToShadowRoot(this.shadowRoot, style);
+      this.addStyleToShadowRoot(style);
     }
   }
 
+  // Register custom elements
   customElements.define("custom-accordion", Accordion);
   customElements.define("custom-accordion-item", AccordionItem);
   customElements.define("custom-accordion-trigger", AccordionTrigger);
