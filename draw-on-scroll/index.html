@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draw on Scroll</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="scroll-up__fixed">
+        <button class="scroll-up__btn">
+          <svg
+            class="scroll-up__icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
+            fill="none"
+          >
+            <rect
+              x="0.5"
+              y="0.5"
+              width="47"
+              height="47"
+              rx="23.5"
+              fill="#F7F7F7"
+              fill-opacity="0.2"
+            />
+            <rect
+              class="progress-rect"
+              x="0.5"
+              y="0.5"
+              width="47"
+              height="47"
+              rx="23.5"
+              stroke="#004B88"
+            />
+            <path d="M24 34L24 18" stroke="#004B88" stroke-width="3" />
+            <path
+              d="M16.9492 25.2461L24.1905 18.0048L31.4318 25.2461"
+              stroke="#004B88"
+              stroke-width="3"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
