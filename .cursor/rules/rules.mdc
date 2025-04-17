@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+[break_down_rule.md](mdc:.cursor/rules/break_down_rule.md)
+[implementation_rule.md](mdc:.cursor/rules/implementation_rule.md)
+[technical_design_documentation_rule.md](mdc:.cursor/rules/technical_design_documentation_rule.md)
