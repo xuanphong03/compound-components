@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+}
+
+body {
+  font-size: 1vw;
+}
+
+.container {
+  width: 85rem;
+  margin: 0 auto;
+}
+
+.card-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+}
+
+.card-item {
+  position: relative;
+  flex-shrink: 0;
+  flex-basis: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #fff;
+  background-color: #000;
+  border-radius: 1.5rem;
+  transition: flex-basis 0.5s ease;
+}
+
+.card-item:hover {
+  flex-basis: 70%;
+}
+.card-list:has(.card-item:hover) .card-item:not(:hover) {
+  flex-basis: 10%;
+}
+.card-list:has(.card-item:hover) .card-item:not(:hover)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0.2;
+  border-radius: inherit;
+}
+.card-list > .card-item + .card-item {
+  margin-left: 0.75rem;
+}
