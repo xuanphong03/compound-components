@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+}
+
+html {
+  font-size: 1vw;
+}
+
+.container {
+  width: 85rem;
+  margin: 0 auto;
+}
+
+.compound-component-container {
+  padding: 2rem 0;
+}
+.compound-component-container .title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #004b88;
+  margin-bottom: 2.5rem;
+}
+
+.compound-component-container .compound-component-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.compound-component-list .compound-component-item {
+  color: #fff;
+  background: #004b88;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: opacity 0.5s ease;
+}
+
+.compound-component-list .compound-component-item:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.compound-component-list .compound-component-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  padding: 1rem;
+}
