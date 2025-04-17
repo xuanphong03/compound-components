@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 1vw;
+  line-height: 1.5;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  height: 500vh;
+}
+
+.container {
+  width: 85rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 639.98px) {
+  html {
+    font-size: 4.267vw;
+  }
+  .container {
+    width: 100%;
+    padding: 0 0.75rem;
+    margin: 0;
+  }
+}
+
+@media (min-width: 1979.98px) {
+  html {
+    font-size: 16px;
+  }
+}
