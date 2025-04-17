@@ -1,31 +1,37 @@
 // Initialize when DOM is fully loaded
-window.addEventListener("DOMContentLoaded", function () {
-  // Get scroll up button and its progress indicator
+document.addEventListener("DOMContentLoaded", () => {
+  // Cache DOM elements
   const scrollUpBtnEl = document.querySelector(".scroll-up__btn");
   const progressRectEl = scrollUpBtnEl?.querySelector(".progress-rect");
 
   // Exit if required elements are not found
-  if (!scrollUpBtnEl || !progressRectEl) return;
+  if (!scrollUpBtnEl || !progressRectEl) {
+    console.warn("Scroll up button or progress element not found");
+    return;
+  }
 
-  // Circle progress settings
-  const radius = 23.5; // vì rx = 23.5 (bo góc tròn, gần hình tròn)
+  // Cache circle progress settings
+  const radius = 23.5;
   const circumference = 2 * Math.PI * radius;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 
   // Set initial progress circle state
   progressRectEl.setAttribute("stroke-dasharray", circumference);
   progressRectEl.setAttribute("stroke-dashoffset", circumference);
 
-  // Update progress circle based on scroll position
+  // Debounced scroll handler using requestAnimationFrame
+  let ticking = false;
   const drawProgress = () => {
-    // Get current scroll position and total scrollable height
-    const scrollTop = window.scrollY;
-    const docHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
-
-    // Calculate progress percentage and update circle
-    const scrollPercent = scrollTop / docHeight;
-    const offset = circumference - scrollPercent * circumference;
-    progressRectEl.setAttribute("stroke-dashoffset", offset);
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const scrollPercent = scrollTop / docHeight;
+        const offset = circumference - scrollPercent * circumference;
+        progressRectEl.setAttribute("stroke-dashoffset", offset);
+        ticking = false;
+      });
+      ticking = true;
+    }
   };
 
   // Handle click to scroll back to top
@@ -36,7 +42,7 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  // Set up event listeners
+  // Set up event listeners with passive option for better performance
   scrollUpBtnEl.addEventListener("click", scrollUpHandler);
-  window.addEventListener("scroll", drawProgress);
+  window.addEventListener("scroll", drawProgress, { passive: true });
 });
