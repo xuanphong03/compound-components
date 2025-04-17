@@ -1,33 +1,34 @@
-// Wait for DOM to be fully loaded before executing
+// Initialize when DOM is fully loaded
 window.addEventListener("DOMContentLoaded", function () {
-  // Cache DOM elements
+  // Get scroll up button and its progress indicator
   const scrollUpBtnEl = document.querySelector(".scroll-up__btn");
   const progressRectEl = scrollUpBtnEl?.querySelector(".progress-rect");
 
-  // Early return if elements don't exist
-  if (!scrollUpBtnEl || !progressRectEl) {
-    console.warn("Scroll up button or progress rectangle not found");
-    return;
-  }
+  // Exit if required elements are not found
+  if (!scrollUpBtnEl || !progressRectEl) return;
 
-  // Constants for circle calculations
-  const radius = 23.5; // Radius of the circular progress indicator
+  // Circle progress settings
+  const radius = 23.5; // vì rx = 23.5 (bo góc tròn, gần hình tròn)
   const circumference = 2 * Math.PI * radius;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 
-  // Initialize progress circle
+  // Set initial progress circle state
   progressRectEl.setAttribute("stroke-dasharray", circumference);
   progressRectEl.setAttribute("stroke-dashoffset", circumference);
 
-  // Calculate and update progress based on scroll position
+  // Update progress circle based on scroll position
   const drawProgress = () => {
+    // Get current scroll position and total scrollable height
     const scrollTop = window.scrollY;
+    const docHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    // Calculate progress percentage and update circle
     const scrollPercent = scrollTop / docHeight;
     const offset = circumference - scrollPercent * circumference;
     progressRectEl.setAttribute("stroke-dashoffset", offset);
   };
 
-  // Smooth scroll to top of page
+  // Handle click to scroll back to top
   const scrollUpHandler = () => {
     window.scrollTo({
       top: 0,
@@ -35,7 +36,7 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  // Add event listeners
+  // Set up event listeners
   scrollUpBtnEl.addEventListener("click", scrollUpHandler);
   window.addEventListener("scroll", drawProgress);
 });
