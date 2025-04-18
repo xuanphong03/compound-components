@@ -1,0 +1,121 @@
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("IntelligentRegular.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-Regular_3.otf") format("opentype");
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-RegularItalic.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-RegularItalic_1.otf") format("opentype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-ThinItalic.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-ThinItalic_1.otf") format("opentype");
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-Thin.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-Thin_1.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-Light_1.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-LightItalic_1.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-Semibold_1.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-SemiboldItalic_1.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-SemiboldItalic.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("IntelligentBold.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-Bold_1.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-BoldItalic_1.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-BoldItalic.otf") format("opentype");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("IntelligentExtrabold.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-Extrabold_1.otf") format("opentype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-ExtraboldItalic_1.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-ExtraboldItalic.otf") format("opentype");
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("IntelligentBlack.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-Black_1.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Averta Std CY";
+    src: url("Intelligent Design - AvertaStdCY-BlackItalic_1.otf") format("opentype"),
+    url("Intelligent Design - AvertaStdCY-BlackItalic.otf") format("opentype");
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}

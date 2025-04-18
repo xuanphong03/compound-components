@@ -1,0 +1,111 @@
+/* CTA */
+.cta {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+}
+.cta .cta-overlay {
+  position: absolute;
+  height: 8.3125rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background: linear-gradient(0deg, #000 0%, rgba(102, 102, 102, 0) 100%);
+}
+.cta-inner {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.cta-list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  max-width: fit-content;
+  margin: 0 auto;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 4px 8px 32px 0px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem;
+}
+.cta-item-inner {
+  position: relative;
+  display: flex;
+  padding: 0.625rem 1.25rem;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 1.25rem;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.5s ease;
+  overflow: hidden;
+}
+
+.cta-item-inner > * {
+  position: relative;
+  z-index: 1;
+}
+.cta-item-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+      0deg,
+      rgba(0, 75, 136, 0.08) 0%,
+      rgba(0, 75, 136, 0.08) 100%
+    ),
+    #fff;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.cta-item-inner:hover::before {
+  opacity: 1;
+}
+.cta-item-wrapper {
+  display: flex;
+  align-items: center;
+}
+.cta-item-wrapper:not(:last-child)::after {
+  content: "";
+  position: relative;
+  width: 0.0625rem;
+  height: 3.3125rem;
+  background: #dfe1f5;
+}
+.cta-item-wrapper:not(:first-child),
+.cta-item-wrapper:not(:last-child)::after {
+  margin-left: 0.75rem;
+}
+
+.cta-item-inner img {
+  width: 2.375rem;
+  height: 2.375rem;
+  flex-shrink: 0;
+}
+
+.cta-item-inner .cta-item__content {
+  display: flex;
+  flex-direction: column;
+}
+.cta-item-inner .cta-item__content-title {
+  color: var(--text-title, #004b88);
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 1.5rem */
+}
+.cta-item-inner .cta-item__content-subtitle {
+  margin-top: -0.125rem;
+  color: var(--text-body-icon, #465478);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 1.125rem */
+}

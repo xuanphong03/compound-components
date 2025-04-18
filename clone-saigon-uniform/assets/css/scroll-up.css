@@ -1,0 +1,28 @@
+/* Scroll Up */
+.scroll-up {
+  position: fixed;
+  right: 3.125rem;
+  bottom: 2.65rem;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 200;
+}
+
+.scroll-up__btn {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+}
+.scroll-up__icon {
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-up__icon .progress-rect {
+  transition: stroke-dashoffset 0.2s linear;
+}
